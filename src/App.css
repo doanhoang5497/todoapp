@@ -1,0 +1,77 @@
+body{
+  background-color: #EEEEEE;
+}
+.todolist{
+  background-color: #FFF;
+  padding: 20px 20px 10px 20px;
+  width: 600px;
+  margin: 30px auto;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  position: relative;
+}
+.todolist h1 {
+  margin: 0;
+  padding-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #555;
+  font-size: 36px;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+}
+.todolist ul{
+  padding-left: 0%;
+}
+.todolist .ulItem li{
+  display: flex;
+  padding: 5px 5px 5px 0px;
+  border-bottom: 1px solid #ccc;
+}
+.todolist .ulItem li:last-child{
+  border-bottom: none;
+}
+footer {
+  border-top: 1px solid #ddd;
+  background-color: #F4FCE8;
+  margin: 0 -20px -10px -20px;
+  padding: 12px 20px;
+  position: relative;
+  color: #777;
+}
+.btnAS{
+  border-right: 1px solid #ccc;
+  margin-right: 15px;
+  height: 20px;
+  width: 10%;
+}
+.sumItem, .btnAS, .ulStatus{
+  display: inline;
+}
+.addButton,.searchButton{
+  padding-right: 10px;
+}
+.addButton:hover, .searchButton :hover {
+  color: #000;
+  opacity: 1;
+  cursor: pointer;
+}
+.ulStatus{
+  float: right;
+}
+.ulStatus li{
+  display: inline;
+  padding: 5px;
+}
+.ulStatus li.selected{
+  border-color: #333;
+}
+.info{
+  position: absolute;
+  margin-top: 20px;
+  left: 0;
+  right: 0;
+  color: #999;
+  text-align: center;
+}
