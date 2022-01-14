@@ -36,9 +36,9 @@ function App() {
   }
   const escFunction = useCallback((event) => {
     console.log(event.keyCode);
-    if(event.keyCode === 27) {
+    if (event.keyCode === 27) {
       setShowInputAdd(false);
-          setShowInputSearch(false)
+      setShowInputSearch(false)
     }
   }, []);
   useEffect(() => {
@@ -84,15 +84,15 @@ function App() {
     setInputSearch(e.target.value)
     dispatch(searchTodo(e.target.value))
   };
-  const handleSetTypeAll = () =>{
+  const handleSetTypeAll = () => {
     setType('All')
     dispatch(tabStatus(type))
   }
-  const handleSetTypeActive = () =>{
+  const handleSetTypeActive = () => {
     setType('Active')
     dispatch(tabStatus(type))
   }
-  const handleSetTypeComplete = () =>{
+  const handleSetTypeComplete = () => {
     setType('Complete')
     dispatch(tabStatus(type))
   }
