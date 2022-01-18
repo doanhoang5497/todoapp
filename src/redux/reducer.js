@@ -13,7 +13,6 @@ const initState = {
         { id: 4, name: 'Giat do', done: false }
     ]
 }
-
 const rootReducer = (state = initState, action) => {
     switch (action.type) {
         case 'addTodo':
@@ -58,5 +57,4 @@ const rootReducer = (state = initState, action) => {
             return state
     }
 }
-
 export default rootReducer;
