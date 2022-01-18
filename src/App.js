@@ -11,13 +11,17 @@ import './App.css';
 
 
 function App() {
-  const dataList = useSelector(data)
+  const dataListAll = useSelector(data)
+  const dataListActive = dataListAll.filter(dataActive => dataActive.done === "Active")
+  const dataListComplete = dataListAll.filter(dataComplete => dataComplete.done === "Complete")
   const dispatch = useDispatch()
   const [inputAdd, setInputAdd] = useState('')
   const [inputSearch, setInputSearch] = useState('')
   const [showInputAdd, setShowInputAdd] = useState(false)
   const [showInputSearch, setShowInputSearch] = useState(false)
   const [type, setType] = useState('All')
+  const [checked, setChecked] = useState(dataListComplete.map(e => e.id))
+  console.log(checked);
   const handleAdd = () => {
     if (showInputSearch) {
       setShowInputAdd(!showInputAdd)
@@ -110,21 +114,49 @@ function App() {
         onChange={handleInputSearch}
       />}
       <ul className='ulItem'>
-        {dataList.map(item =>
-          <li
-            key={item.id}
-          >
-            <Checkbox>
-              {item.name}
-            </Checkbox>
-          </li>)}
+        {type === 'Active'
+          ?
+          (dataListActive.map(item =>
+            <li
+              key={item.id}
+            >
+              <Checkbox>
+                {item.name}
+              </Checkbox>
+            </li>))
+          :
+          (
+            type === 'Complete'
+              ?
+              (dataListComplete.map(item =>
+                <li
+                  key={item.id}
+                >
+                  <Checkbox
+                    checked={true}
+                  >
+                    {item.name}
+                  </Checkbox>
+                </li>))
+              :
+              (
+                (dataListAll.map(item =>
+                  <li
+                    key={item.id}
+                  >
+                    <Checkbox>
+                      {item.name}
+                    </Checkbox>
+                  </li>))
+              )
+          )}
       </ul>
       <footer>
         <div className='btnAS'>
           <PlusOutlined className='addButton' onClick={handleAdd} />
           <SearchOutlined className='searchButton' onClick={handleSearch} />
         </div>
-        <div className='sumItem'>{dataList.length}  items left</div>
+        <div className='sumItem'>{dataListAll.length}  items left</div>
         <ul className='ulStatus'>
           <li><a onClick={handleSetTypeAll}
             style={(type === 'All' ? { color: 'red' } : { color: '#555' })}
