@@ -16,3 +16,9 @@ export const tabStatus =(status)=>{
         payload:status
     }
 }
+export const updateChecked =(idChecked)=>{
+    return {
+        type:'updateChecked',
+        payload:idChecked
+    }
+}

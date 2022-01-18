@@ -1,10 +1,10 @@
 import { Input, Checkbox } from 'antd'
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 import { data } from './redux/data';
-import { addTodo, searchTodo, tabStatus } from './redux/actions'
+import { addTodo, searchTodo, tabStatus, updateChecked } from './redux/actions'
 import 'antd/dist/antd.css';
 import './App.css';
 
@@ -12,8 +12,8 @@ import './App.css';
 
 function App() {
   const dataListAll = useSelector(data)
-  const dataListActive = dataListAll.filter(dataActive => dataActive.done === "Active")
-  const dataListComplete = dataListAll.filter(dataComplete => dataComplete.done === "Complete")
+  const dataListActive = dataListAll.filter(dataActive => dataActive.done === true)
+  const dataListComplete = dataListAll.filter(dataComplete => dataComplete.done === false)
   const dispatch = useDispatch()
   const [inputAdd, setInputAdd] = useState('')
   const [inputSearch, setInputSearch] = useState('')
@@ -21,7 +21,9 @@ function App() {
   const [showInputSearch, setShowInputSearch] = useState(false)
   const [type, setType] = useState('All')
   const [checked, setChecked] = useState(dataListComplete.map(e => e.id))
-  console.log(checked);
+  const inputAddRef = useRef();
+  const inputSearchRef = useRef();
+  
   const handleAdd = () => {
     if (showInputSearch) {
       setShowInputAdd(!showInputAdd)
@@ -34,12 +36,16 @@ function App() {
     if (showInputAdd) {
       setShowInputAdd(!showInputAdd)
       setShowInputSearch(!showInputSearch)
+
     } else {
       setShowInputSearch(!showInputSearch)
     }
   }
+  useEffect(()=>{
+    if (showInputAdd){inputAddRef.current.focus();}
+    if (showInputSearch){inputSearchRef.current.focus();}
+  })
   const escFunction = useCallback((event) => {
-    console.log(event.keyCode);
     if (event.keyCode === 27) {
       setShowInputAdd(false);
       setShowInputSearch(false)
@@ -58,6 +64,7 @@ function App() {
       if (event.keyCode === 70 && event.ctrlKey) {
         setShowInputAdd(false);
         setShowInputSearch(true)
+        //inputSearchRef.current.focus();
         event.preventDefault();
         // callMyFunction();
       }
@@ -93,12 +100,22 @@ function App() {
     dispatch(tabStatus(type))
   }
   const handleSetTypeActive = () => {
-    setType('Active')
+    setType(true)
     dispatch(tabStatus(type))
   }
   const handleSetTypeComplete = () => {
-    setType('Complete')
+    setType(false)
     dispatch(tabStatus(type))
+  }
+  const handleChecked = (idChecked)=>{
+    setChecked(prev=>{
+      if (checked.includes(idChecked)){
+        return checked.filter(item=>item !==idChecked)
+      }else{
+        return [...prev,idChecked]
+      }
+    })
+    dispatch(updateChecked(idChecked))
   }
   return (
     <div className='todolist'>
@@ -107,33 +124,41 @@ function App() {
         value={inputAdd}
         onChange={e => setInputAdd(e.target.value)}
         onKeyPress={handleInputAdd}
+        ref={inputAddRef}
       />}
 
       {showInputSearch && <Input placeholder="Search"
         value={inputSearch}
         onChange={handleInputSearch}
+        ref={inputSearchRef}
       />}
       <ul className='ulItem'>
-        {type === 'Active'
+        {type === true
           ?
           (dataListActive.map(item =>
             <li
               key={item.id}
+              style={( checked.includes(item.id) ? { opacity: 0.5, textDecoration:'line-through' } : {  })}
             >
-              <Checkbox>
+              <Checkbox
+               checked={checked.includes(item.id)}
+               onChange={()=>handleChecked(item.id)}
+               >
                 {item.name}
               </Checkbox>
             </li>))
           :
           (
-            type === 'Complete'
+            type === false
               ?
               (dataListComplete.map(item =>
                 <li
                   key={item.id}
+                  style={( checked.includes(item.id) ? { opacity: 0.5, textDecoration:'line-through' } : {  })}
                 >
                   <Checkbox
-                    checked={true}
+                     checked={checked.includes(item.id)}
+                     onChange={()=>handleChecked(item.id)}
                   >
                     {item.name}
                   </Checkbox>
@@ -143,8 +168,12 @@ function App() {
                 (dataListAll.map(item =>
                   <li
                     key={item.id}
+                    style={( checked.includes(item.id) ? { opacity: 0.5, textDecoration:'line-through' } : {  })}
                   >
-                    <Checkbox>
+                    <Checkbox
+                    checked={checked.includes(item.id)}
+                    onChange={()=>handleChecked(item.id)}
+                    >
                       {item.name}
                     </Checkbox>
                   </li>))
@@ -164,12 +193,12 @@ function App() {
             All
           </a></li>
           <li><a onClick={handleSetTypeActive}
-            style={(type === 'Active' ? { color: 'red' } : { color: '#555' })}
+            style={(type === true ? { color: 'red' } : { color: '#555' })}
           >
             Active
           </a></li>
           <li><a onClick={handleSetTypeComplete}
-            style={(type === 'Complete' ? { color: 'red' } : { color: '#555' })}
+            style={(type === false ? { color: 'red' } : { color: '#555' })}
           >
             Complete
           </a></li>

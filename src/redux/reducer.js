@@ -7,10 +7,10 @@ const initState = {
         name: 'All',
     },
     todoList: [
-        { id: 1, name: 'Quet nha', done: 'Active' },
-        { id: 2, name: 'Rua bat', done: 'Complete' },
-        { id: 3, name: 'Nau com', done: 'Active' },
-        { id: 4, name: 'Giat do', done: 'Complete' }
+        { id: 1, name: 'Quet nha', done: true },
+        { id: 2, name: 'Rua bat', done: false },
+        { id: 3, name: 'Nau com', done: true },
+        { id: 4, name: 'Giat do', done: false }
     ]
 }
 
@@ -31,14 +31,29 @@ const rootReducer = (state = initState, action) => {
                     status: action.payload
                 }
             }
-            case 'tabStatus':
-                return {
-                    ...state,
-                    tabs: {
-                        ...state.tabs,
-                        name: action.payload
-                    }
+        case 'tabStatus':
+            return {
+                ...state,
+                tabs: {
+                    ...state.tabs,
+                    name: action.payload
                 }
+            }
+        case 'updateChecked':
+            return (
+                {
+                    ...state,
+                    todoList:
+                        state.todoList.map(i => {
+                            if (i.id === action.payload) {
+                                return {
+                                    ...i,
+                                    done: !i.done
+                                }
+                            }
+                            return i;
+                        })
+                });
         default:
             return state
     }
