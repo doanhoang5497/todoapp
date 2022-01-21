@@ -80,7 +80,7 @@ function App() {
       dispatch(addTodo({
         id: uuidv4(),
         name: inputAdd,
-        done: false
+        done: true
       }));
       setInputAdd('')
     }
